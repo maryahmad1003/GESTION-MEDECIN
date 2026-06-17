@@ -1,0 +1,44 @@
+<h2>Liste des médecins enregistrés</h2>
+
+  <button class="btn-back" routerLink="/">
+    Retour au formulaire
+  </button>
+
+  <div class="empty" *ngIf="medecins.length === 0">
+    Aucun médecin enregistré pour le moment.
+  </div>
+
+<div class="table-container" *ngIf="medecins.length > 0">
+  <table>
+<thead>
+       <tr>
+         <th>ID</th>
+         <th>Matricule</th>
+         <th>Code</th>
+         <th>Nom</th>
+         <th>Prénom</th>
+         <th>Sexe</th>
+         <th>Spécialité</th>
+         <th>Téléphone</th>
+         <th>Email</th>
+         <th>Expérience</th>
+         <th>Disponibilité</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr *ngFor="let medecin of medecins">
+         <td>{{ medecin.id }}</td>
+         <td>{{ medecin.matricule }}</td>
+         <td>{{ medecin.code }}</td>
+         <td>{{ medecin.nom }}</td>
+         <td>{{ medecin.prenom }}</td>
+         <td>{{ medecin.sexe }}</td>
+         <td>{{ medecin.specialite }}</td>
+         <td>{{ medecin.telephone }}</td>
+         <td>{{ medecin.email }}</td>
+         <td>{{ medecin.experience }} ans</td>
+         <td>{{ medecin.disponibilite }}</td>
+       </tr>
+     </tbody>
+  </table>
+</div>
