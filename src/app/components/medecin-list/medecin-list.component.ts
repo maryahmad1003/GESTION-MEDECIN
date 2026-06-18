@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,15 +15,31 @@ import { MedecinService } from '../../services/medecin.service';
 })
 export class MedecinListComponent implements OnInit, OnDestroy {
   medecins: Medecin[] = [];
-  private subscription: Subscription = new Subscription();
+  errorMessage = '';
+  private subscription = new Subscription();
 
-  constructor(private medecinService: MedecinService) {}
+  constructor(private readonly medecinService: MedecinService) {}
 
   ngOnInit(): void {
-    this.medecins = this.medecinService.getMedecins();
-
     this.subscription = this.medecinService.getMedecinsObservable().subscribe(medecins => {
       this.medecins = medecins;
+    });
+
+    this.medecinService.refreshMedecins().subscribe({
+      error: () => {
+        this.errorMessage = 'Impossible de charger les médecins depuis le serveur.';
+      }
+    });
+  }
+
+  supprimerMedecin(id: number): void {
+    this.medecinService.deleteMedecin(id).subscribe({
+      next: () => {
+        this.errorMessage = '';
+      },
+      error: () => {
+        this.errorMessage = 'Erreur lors de la suppression du médecin.';
+      }
     });
   }
 

@@ -1,168 +1,281 @@
-<form #form="ngForm" (ngSubmit)="ajouterMedecin(form)" novalidate>
-  <div class="field">
-    <label for="matricule">Matricule</label>
-    <input
-      id="matricule"
-      type="text"
-      name="matricule"
-      [(ngModel)]="medecin.matricule"
-      #matricule="ngModel"
-      required
-      placeholder="Exemple : MED-001">
-    <div class="error" *ngIf="matricule.invalid && (matricule.touched || form.submitted)">
-      Le matricule est obligatoire.
-    </div>
-  </div>
+<main class="profile-page">
+  <section class="profile-shell">
+    <aside class="hero-panel">
+      <div class="hero-top">
+        <div class="hero-breadcrumb">
+          <span class="hero-breadcrumb-icon" aria-hidden="true">✦</span>
+          <span>Gestion des médecins</span>
+          <span class="hero-breadcrumb-separator">/</span>
+          <span>{{ isEditing ? 'Modification' : 'Création' }}</span>
+        </div>
 
-  <div class="field">
-    <label for="code">Code professionnel</label>
-    <input
-      id="code"
-      type="text"
-      name="code"
-      [(ngModel)]="medecin.code"
-      #code="ngModel"
-      required
-      placeholder="Exemple : CODE-001">
-    <div class="error" *ngIf="code.invalid && (code.touched || form.submitted)">
-      Le code professionnel est obligatoire.
-    </div>
-  </div>
+        <h1 class="hero-title">
+          <span>{{ isEditing ? 'Modifier' : 'Créer' }}</span>
+          <span>un médecin</span>
+        </h1>
 
-  <div class="field">
-    <label for="nom">Nom</label>
-    <input
-      id="nom"
-      type="text"
-      name="nom"
-      [(ngModel)]="medecin.nom"
-      #nom="ngModel"
-      required
-      placeholder="Nom de famille">
-    <div class="error" *ngIf="nom.invalid && (nom.touched || form.submitted)">
-      Le nom est obligatoire.
-    </div>
-  </div>
+        <p class="hero-copy">
+          Saisissez les informations du praticien pour l’ajouter à la clinique.
+          Les données restent stockées temporairement dans un service Angular.
+        </p>
+      </div>
 
-  <div class="field">
-    <label for="prenom">Prénom</label>
-    <input
-      id="prenom"
-      type="text"
-      name="prenom"
-      [(ngModel)]="medecin.prenom"
-      #prenom="ngModel"
-      required
-      placeholder="Prénom du médecin">
-    <div class="error" *ngIf="prenom.invalid && (prenom.touched || form.submitted)">
-      Le prénom est obligatoire.
-    </div>
-  </div>
+      <div class="hero-bottom">
+        <div class="hero-highlight">
+          <span class="hero-highlight-icon" aria-hidden="true">⚕</span>
+        </div>
 
-  <div class="field">
-    <label for="sexe">Sexe</label>
-    <select
-      id="sexe"
-      name="sexe"
-      [(ngModel)]="medecin.sexe"
-      #sexe="ngModel"
-      required>
-      <option value="">Choisir le sexe</option>
-      <option value="Masculin">Masculin</option>
-      <option value="Féminin">Féminin</option>
-    </select>
-    <div class="error" *ngIf="sexe.invalid && (sexe.touched || form.submitted)">
-      Le sexe est obligatoire.
-    </div>
-  </div>
+        <div class="toast toast-success" *ngIf="successMessage">
+          <div class="toast-icon toast-icon-success" aria-hidden="true">✓</div>
+          <div class="toast-body">
+            <strong>Médecin enregistré</strong>
+            <p>{{ successMessage }}</p>
+          </div>
+        </div>
 
-  <div class="field">
-    <label for="specialite">Spécialité</label>
-    <input
-      id="specialite"
-      type="text"
-      name="specialite"
-      [(ngModel)]="medecin.specialite"
-      #specialite="ngModel"
-      required
-      placeholder="Exemple : Cardiologie">
-    <div class="error" *ngIf="specialite.invalid && (specialite.touched || form.submitted)">
-      La spécialité est obligatoire.
-    </div>
-  </div>
+        <div class="toast toast-error" *ngIf="errorMessage">
+          <div class="toast-icon toast-icon-error" aria-hidden="true">!</div>
+          <div class="toast-body">
+            <strong>Erreur détectée</strong>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </div>
+      </div>
+    </aside>
 
-  <div class="field">
-    <label for="telephone">Téléphone</label>
-    <input
-      id="telephone"
-      type="tel"
-      name="telephone"
-      [(ngModel)]="medecin.telephone"
-      #telephone="ngModel"
-      required
-      placeholder="Exemple : 0600000000">
-    <div class="error" *ngIf="telephone.invalid && (telephone.touched || form.submitted)">
-      Le téléphone est obligatoire.
-    </div>
-  </div>
+    <section class="form-panel">
+      <div class="panel-header">
+        <div>
+          <p class="panel-kicker">Médecin</p>
+          <h2>{{ isEditing ? 'Modifier le profil' : 'Créer le profil' }}</h2>
+          <p class="panel-subtitle">
+            Tous les champs sont obligatoires. Le code professionnel est généré automatiquement.
+          </p>
+        </div>
 
-  <div class="field">
-    <label for="email">Email</label>
-    <input
-      id="email"
-      type="email"
-      name="email"
-      [(ngModel)]="medecin.email"
-      #email="ngModel"
-      required
-      email
-      placeholder="exemple@clinique.com">
-    <div class="error" *ngIf="email.invalid && (email.touched || form.submitted)">
-      <span *ngIf="email.errors?.['required']">L'adresse email est obligatoire.</span>
-      <span *ngIf="email.errors?.['email']">L'adresse email doit être valide.</span>
-    </div>
-  </div>
+        <a class="panel-link" routerLink="/liste" aria-label="Voir la liste des médecins" title="Liste des médecins">
+          <span aria-hidden="true">☰</span>
+          <span class="sr-only">Liste des médecins</span>
+        </a>
+      </div>
 
-  <div class="field">
-    <label for="experience">Années d'expérience</label>
-    <input
-      id="experience"
-      type="number"
-      name="experience"
-      [(ngModel)]="medecin.experience"
-      #experience="ngModel"
-      required
-      min="0"
-      placeholder="Exemple : 5">
-    <div class="error" *ngIf="experience.invalid && (experience.touched || form.submitted)">
-      <span *ngIf="experience.errors?.['required']">Les années d'expérience sont obligatoires.</span>
-      <span *ngIf="experience.errors?.['min']">Le nombre d'années doit être supérieur ou égal à 0.</span>
-    </div>
-  </div>
+      <form #form="ngForm" class="doctor-form" (ngSubmit)="enregistrerMedecin(form)" novalidate>
+        <section class="form-section">
+          <div class="section-title">
+            <span>Identité</span>
+          </div>
 
-  <div class="field">
-    <label for="disponibilite">Disponibilité</label>
-    <select
-      id="disponibilite"
-      name="disponibilite"
-      [(ngModel)]="medecin.disponibilite"
-      #disponibilite="ngModel"
-      required>
-      <option value="">Choisir la disponibilité</option>
-      <option value="Disponible">Disponible</option>
-      <option value="Non disponible">Non disponible</option>
-    </select>
-    <div class="error" *ngIf="disponibilite.invalid && (disponibilite.touched || form.submitted)">
-      La disponibilité est obligatoire.
-    </div>
-  </div>
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="matricule">Matricule</label>
+              <input
+                id="matricule"
+                type="text"
+                name="matricule"
+                [(ngModel)]="medecin.matricule"
+                #matricule="ngModel"
+                required
+                placeholder="MED-2048">
+              <div class="field-error" *ngIf="matricule.invalid && (matricule.touched || form.submitted)">
+                Le matricule est obligatoire.
+              </div>
+            </div>
 
-  <div class="buttons">
-    <button type="submit" class="btn-submit" [disabled]="form.invalid">
-      Enregistrer le médecin
-    </button>
-    <button type="button" class="btn-secondary" routerLink="/liste">
-      Liste des médecins
-    </button>
-  </div>
-</form>
+            <div class="field">
+              <label for="nom">Nom</label>
+              <input
+                id="nom"
+                type="text"
+                name="nom"
+                [(ngModel)]="medecin.nom"
+                #nom="ngModel"
+                required
+                placeholder="Benali">
+              <div class="field-error" *ngIf="nom.invalid && (nom.touched || form.submitted)">
+                Le nom est obligatoire.
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="prenom">Prénom</label>
+            <input
+              id="prenom"
+              type="text"
+              name="prenom"
+              [(ngModel)]="medecin.prenom"
+              #prenom="ngModel"
+              required
+              placeholder="Amine">
+            <div class="field-error" *ngIf="prenom.invalid && (prenom.touched || form.submitted)">
+              Le prénom est obligatoire.
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Sexe</label>
+            <div class="segmented-group">
+              <label class="chip" [class.is-active]="medecin.sexe === 'Masculin'">
+                <input
+                  #sexe="ngModel"
+                  type="radio"
+                  name="sexe"
+                  [(ngModel)]="medecin.sexe"
+                  [value]="'Masculin'"
+                  required>
+                <span>♂ Masculin</span>
+              </label>
+
+              <label class="chip" [class.is-active]="medecin.sexe === 'Féminin'">
+                <input
+                  type="radio"
+                  name="sexe"
+                  [(ngModel)]="medecin.sexe"
+                  [value]="'Féminin'"
+                  required>
+                <span>♀ Féminin</span>
+              </label>
+            </div>
+            <div class="field-error" *ngIf="sexe.invalid && (sexe.touched || form.submitted)">
+              Le sexe est obligatoire.
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <span>Informations professionnelles</span>
+          </div>
+
+          <div class="field">
+            <label for="specialite">Spécialité</label>
+            <div class="field-shell" [class.field-shell--error]="specialite.invalid && (specialite.touched || form.submitted)">
+              <span class="field-prefix" aria-hidden="true">⚕</span>
+              <input
+                id="specialite"
+                type="text"
+                name="specialite"
+                [(ngModel)]="medecin.specialite"
+                #specialite="ngModel"
+                required
+                placeholder="Cardiologie">
+            </div>
+            <div class="field-error" *ngIf="specialite.invalid && (specialite.touched || form.submitted)">
+              La spécialité est obligatoire.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="experience">Années d’expérience</label>
+            <div class="stepper-shell">
+              <input
+                id="experience"
+                type="number"
+                name="experience"
+                [(ngModel)]="medecin.experience"
+                #experience="ngModel"
+                required
+                min="0"
+                step="1">
+
+              <span class="stepper-unit">ans</span>
+
+              <div class="stepper-actions" aria-label="Ajuster les années d’expérience">
+                <button type="button" (click)="decrementExperience()" aria-label="Diminuer l’expérience">−</button>
+                <button type="button" (click)="incrementExperience()" aria-label="Augmenter l’expérience">+</button>
+              </div>
+            </div>
+            <div class="field-error" *ngIf="experience.invalid && (experience.touched || form.submitted)">
+              <span *ngIf="experience.errors?.['required']">Les années d’expérience sont obligatoires.</span>
+              <span *ngIf="experience.errors?.['min']">Le nombre d’années doit être supérieur ou égal à 0.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <span>Contact et disponibilité</span>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="field">
+              <label for="telephone">Téléphone</label>
+              <div class="field-shell" [class.field-shell--error]="telephone.invalid && (telephone.touched || form.submitted)">
+                <span class="field-prefix" aria-hidden="true">☎</span>
+                <input
+                  id="telephone"
+                  type="tel"
+                  name="telephone"
+                  [(ngModel)]="medecin.telephone"
+                  #telephone="ngModel"
+                  required
+                  placeholder="0600000000">
+              </div>
+              <div class="field-error" *ngIf="telephone.invalid && (telephone.touched || form.submitted)">
+                Le téléphone est obligatoire.
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <div class="field-shell" [class.field-shell--error]="email.invalid && (email.touched || form.submitted)">
+                <span class="field-prefix" aria-hidden="true">✉</span>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  [(ngModel)]="medecin.email"
+                  #email="ngModel"
+                  required
+                  email
+                  placeholder="exemple@clinique.com">
+              </div>
+              <div class="field-error" *ngIf="email.invalid && (email.touched || form.submitted)">
+                <span *ngIf="email.errors?.['required']">L'adresse email est obligatoire.</span>
+                <span *ngIf="email.errors?.['email']">L'adresse email doit être valide.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Disponibilité</label>
+            <div class="segmented-group">
+              <label class="chip" [class.is-active]="medecin.disponibilite === 'Disponible'">
+                <input
+                  #disponibilite="ngModel"
+                  type="radio"
+                  name="disponibilite"
+                  [(ngModel)]="medecin.disponibilite"
+                  [value]="'Disponible'"
+                  required>
+                <span>✓ Disponible</span>
+              </label>
+
+              <label class="chip" [class.is-active]="medecin.disponibilite === 'Non disponible'">
+                <input
+                  type="radio"
+                  name="disponibilite"
+                  [(ngModel)]="medecin.disponibilite"
+                  [value]="'Non disponible'"
+                  required>
+                <span>✕ Non disponible</span>
+              </label>
+            </div>
+            <div class="field-error" *ngIf="disponibilite.invalid && (disponibilite.touched || form.submitted)">
+              La disponibilité est obligatoire.
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="text-action" (click)="annulerEdition(form)">Annuler</button>
+
+            <button type="submit" class="primary-action" [disabled]="form.invalid">
+              <span class="primary-action-icon" aria-hidden="true">💾</span>
+              <span>{{ isEditing ? 'Mettre à jour le médecin' : 'Enregistrer le médecin' }}</span>
+            </button>
+          </div>
+        </section>
+      </form>
+    </section>
+  </section>
+</main>

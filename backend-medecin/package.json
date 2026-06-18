@@ -1,0 +1,25 @@
+{
+  "name": "backend-medecin",
+  "version": "1.0.0",
+  "description": "API REST Express/PostgreSQL pour la gestion des médecins",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "setup-db": "psql -d gestion_medecin -f schema.sql"
+  },
+  "keywords": [
+    "express",
+    "postgresql",
+    "medecin"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.21.0"
+  }
+}

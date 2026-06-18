@@ -1,44 +1,83 @@
-<h2>Liste des médecins enregistrés</h2>
+<main class="list-page">
+  <section class="list-shell">
+    <div class="list-header">
+      <div class="list-heading">
+        <p class="list-kicker">Gestion des médecins</p>
+        <h2>Liste des médecins enregistrés</h2>
+        <p class="list-subtitle">
+          Consultez les médecins créés depuis le formulaire, puis modifiez ou supprimez chaque ligne.
+        </p>
+      </div>
 
-  <button class="btn-back" routerLink="/">
-    Retour au formulaire
-  </button>
+      <a class="btn-back" routerLink="/" aria-label="Retour au formulaire" title="Retour au formulaire">
+        <span aria-hidden="true">⌂</span>
+        <span class="sr-only">Retour au formulaire</span>
+      </a>
+    </div>
 
-  <div class="empty" *ngIf="medecins.length === 0">
-    Aucun médecin enregistré pour le moment.
-  </div>
+    <div class="notice notice-error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
-<div class="table-container" *ngIf="medecins.length > 0">
-  <table>
-<thead>
-       <tr>
-         <th>ID</th>
-         <th>Matricule</th>
-         <th>Code</th>
-         <th>Nom</th>
-         <th>Prénom</th>
-         <th>Sexe</th>
-         <th>Spécialité</th>
-         <th>Téléphone</th>
-         <th>Email</th>
-         <th>Expérience</th>
-         <th>Disponibilité</th>
-       </tr>
-     </thead>
-     <tbody>
-       <tr *ngFor="let medecin of medecins">
-         <td>{{ medecin.id }}</td>
-         <td>{{ medecin.matricule }}</td>
-         <td>{{ medecin.code }}</td>
-         <td>{{ medecin.nom }}</td>
-         <td>{{ medecin.prenom }}</td>
-         <td>{{ medecin.sexe }}</td>
-         <td>{{ medecin.specialite }}</td>
-         <td>{{ medecin.telephone }}</td>
-         <td>{{ medecin.email }}</td>
-         <td>{{ medecin.experience }} ans</td>
-         <td>{{ medecin.disponibilite }}</td>
-       </tr>
-     </tbody>
-  </table>
-</div>
+    <div class="empty" *ngIf="medecins.length === 0 && !errorMessage">
+      Aucun médecin enregistré pour le moment. Créez-en un depuis le formulaire, puis il apparaîtra ici avec les
+      actions modifier et supprimer.
+    </div>
+
+    <div class="table-container" *ngIf="medecins.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Matricule</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Sexe</th>
+            <th>Spécialité</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>Expérience</th>
+            <th>Disponibilité</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let medecin of medecins">
+            <td>{{ medecin.id }}</td>
+            <td>{{ medecin.matricule }}</td>
+            <td>{{ medecin.nom }}</td>
+            <td>{{ medecin.prenom }}</td>
+            <td>{{ medecin.sexe }}</td>
+            <td>{{ medecin.specialite }}</td>
+            <td>{{ medecin.telephone }}</td>
+            <td>{{ medecin.email }}</td>
+            <td>{{ medecin.experience }} ans</td>
+            <td>{{ medecin.disponibilite }}</td>
+            <td class="actions">
+              <a
+                class="icon-action icon-action--edit"
+                [routerLink]="['/modifier', medecin.id]"
+                aria-label="Modifier le médecin"
+                title="Modifier">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 17.25V20h2.75L17.8 8.95l-2.75-2.75L4 17.25Zm15.71-9.46c.39-.39.39-1.02 0-1.41l-1.59-1.59a.9959.9959 0 0 0-1.41 0l-1.24 1.24 2.75 2.75 1.49-0.99Z" />
+                </svg>
+                <span class="sr-only">Modifier</span>
+              </a>
+
+              <button
+                class="icon-action icon-action--delete"
+                type="button"
+                (click)="supprimerMedecin(medecin.id)"
+                aria-label="Supprimer le médecin"
+                title="Supprimer">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9 3.75h6l1 1.5H21v1.5h-1.5l-1 12a2.25 2.25 0 0 1-2.24 2.07H7.74A2.25 2.25 0 0 1 5.5 18.75l-1-12H3V5.25h5l1-1.5Zm-1.1 3 0.84 10.19a.75.75 0 0 0 .75.69h5.82a.75.75 0 0 0 .75-.69L17 6.75H7.9Zm2.1 2.25h1.5v6H10v-6Zm3.5 0H15v6h-1.5v-6Z" />
+                </svg>
+                <span class="sr-only">Supprimer</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>

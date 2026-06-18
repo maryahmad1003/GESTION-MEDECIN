@@ -5,5 +5,6 @@ import { MedecinListComponent } from './components/medecin-list/medecin-list.com
 
 export const routes: Routes = [
   { path: '', component: MedecinFormComponent },
+  { path: 'modifier/:id', component: MedecinFormComponent },
   { path: 'liste', component: MedecinListComponent }
 ];
